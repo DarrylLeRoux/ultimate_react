@@ -241,4 +241,102 @@ function getTotalReviewCount(book) {
 console.log(getTotalReviewCount(book));
 
 // if the book doesn't have an attribute such as librarything
+
+
+/////////
+// Map //
+/////////
+
+const books = getBooks();
+
+const titles = books.map((book) => book.title);
+titles;
+
+const essentialBookInfo = books.map((book) => ({
+  author: book.author,
+  title: book.title,
+}));
+console.log(essentialBookInfo);
+
+////////////
+// Filter //
+////////////
+
+const longBooks = books.filter((book) => book.pages > 1000);
+console.log(longBooks);
+
+const startsWithThe = books
+  .filter((book) => book.title.startsWith('The'))
+  .filter((book) => book.hasMovieAdaptation)
+  .map((book) => `${book.title} written by ${book.author}`);
+
+console.log(startsWithThe);
+
+const adventureBooks = books
+  .filter((book) => !book.genres.includes('adventure'))
+  .map((book) => book.title);
+console.log(adventureBooks);
+
+////////////
+// Reduce //
+////////////
+
+const pagesAllBooks = books.reduce((acc, book) => acc + book.pages, 0);
+console.log(pagesAllBooks);
+
+//////////
+// Sort //
+//////////
+
+const x = [3, 7, 1, 3, 4];
+// slice to make a copy as sort mutates the original array
+const sorted = x.slice().sort((a, b) => a - b);
+console.log(sorted);
+
+const sortedByPages = books.slice().sort((a, b) => b.pages - a.pages);
+console.log(sortedByPages);
+
+///////////////////////////////////
+// Working with Immutable Arrays //
+///////////////////////////////////
+
+// 1) add elements without changing the original array
+const newBook = {
+  id: 6,
+  title: 'Harry Potter and the Chamber of Secrets',
+  author: 'J.K Rowling',
+};
+
+const booksAfterAdd = [...books, newBook];
+console.log(booksAfterAdd);
+
+// 2) delete elements without changing the original array
+const booksAfterDelete = booksAfterAdd.filter((book) => book.id !== 3);
+console.log(booksAfterDelete);
+
+// 3) update element while in the original array
+const bookUpdate = booksAfterDelete.map((book) =>
+  book.id === 1 ? { ...book, pages: 1 } : book
+);
+
+console.log(bookUpdate);
 */
+
+//////////////
+// Promises //
+//////////////
+
+fetch('https://jsonplaceholder.typicode.com/todos')
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
+///////////////////
+// Async / Await //
+///////////////////
+
+async function getTodos() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/todos');
+  const data = await res.json();
+  console.log(data);
+}
+getTodos();

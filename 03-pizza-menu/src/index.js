@@ -1,52 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
+import pizzaList from './data.js';
 import './index.css';
-
-const pizzaData = [
-  {
-    name: 'Focaccia',
-    ingredients: 'Bread with italian olive oil and rosemary',
-    price: 6,
-    photoName: 'pizzas/focaccia.jpg',
-    soldOut: false,
-  },
-  {
-    name: 'Pizza Margherita',
-    ingredients: 'Tomato and mozarella',
-    price: 10,
-    photoName: 'pizzas/margherita.jpg',
-    soldOut: false,
-  },
-  {
-    name: 'Pizza Spinaci',
-    ingredients: 'Tomato, mozarella, spinach, and ricotta cheese',
-    price: 12,
-    photoName: 'pizzas/spinaci.jpg',
-    soldOut: false,
-  },
-  {
-    name: 'Pizza Funghi',
-    ingredients: 'Tomato, mozarella, mushrooms, and onion',
-    price: 12,
-    photoName: 'pizzas/funghi.jpg',
-    soldOut: false,
-  },
-  {
-    name: 'Pizza Salamino',
-    ingredients: 'Tomato, mozarella, and pepperoni',
-    price: 15,
-    photoName: 'pizzas/salamino.jpg',
-    soldOut: true,
-  },
-  {
-    name: 'Pizza Prosciutto',
-    ingredients: 'Tomato, mozarella, ham, aragula, and burrata cheese',
-    price: 18,
-    photoName: 'pizzas/prosciutto.jpg',
-    soldOut: false,
-  },
-];
 
 function App() {
   return (
@@ -67,10 +22,21 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaList;
+  const numPizzas = pizzas.length;
+
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-      <Pizza
+      {numPizzas > 0 && (
+        <ul className='pizzas'>
+          {pizzas.map((pizza) => {
+            return <Pizza pizzaObj={pizza} key={pizza.name} />;
+          })}
+        </ul>
+      )}
+
+      {/* <Pizza
         name='Pizza Spinaci'
         ingredients='Tomato, mozarella, spinach, and ricotta cheese'
         photoName='pizzas/spinaci.jpg'
@@ -81,7 +47,7 @@ function Menu() {
         ingredients='Tomato, mozarella, and mushrooms'
         photoName='pizzas/funghi.jpg'
         price={12}
-      />
+      /> */}
     </main>
   );
 }
@@ -89,14 +55,14 @@ function Menu() {
 function Pizza(props) {
   console.log(props);
   return (
-    <div className='pizza'>
-      <img src={props.photoName} alt='Spinaci Pizza' />
+    <li className='pizza'>
+      <img src={props.pizzaObj.photoName} alt='Spinaci Pizza' />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -110,7 +76,14 @@ function Footer() {
 
   return (
     <footer className='footer'>
-      <p>{hour} We're currently Open</p>
+      {isOpen && (
+        <div className='order'>
+          <p>
+            We are open until {closeHour}:00. Come visit us or order online.
+          </p>
+          <button className='btn'>Order Now</button>
+        </div>
+      )}
     </footer>
   );
 }

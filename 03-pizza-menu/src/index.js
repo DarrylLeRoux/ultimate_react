@@ -21,67 +21,58 @@ function Header() {
   );
 }
 
-function Menu() {
-  // const pizzas = pizzaList;
-  // const numPizzas = pizzas.length;
+//
 
+function Menu() {
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-      {/* check the length of the pizzaList Object, and if it contains a value, short circuit the truthy value */}
-      {/* {pizzaList.length > 0 && ( */}
-      {/* with ternary: */}
+
       {pizzaList.length > 0 ? (
-        <ul className='pizzas'>
-          {pizzaList.map((pizza) => {
-            // pass all properties of the pizza object into a property (prop) called pizzaObj
-            // alt would be <Pizza name={pizza.name} ingredients={pizza.ingredients} etc/>
-            return <Pizza pizzaObj={pizza} key={pizza.name} />;
-          })}
-        </ul>
+        <React.Fragment>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious
+          </p>
+          <ul className='pizzas'>
+            {pizzaList.map((pizza) => {
+              // pass all properties of the pizza object into a property (prop) called pizzaObj
+              // alt would be <Pizza name={pizza.name} ingredients={pizza.ingredients} etc/>
+              return <Pizza pizzaObj={pizza} key={pizza.name} />;
+            })}
+          </ul>
+        </React.Fragment>
       ) : (
         <p>We're still working on our menu. Please come back later.</p>
       )}
-
-      {/* <Pizza
-        name='Pizza Spinaci'
-        ingredients='Tomato, mozarella, spinach, and ricotta cheese'
-        photoName='pizzas/spinaci.jpg'
-        price={10}
-      />
-      <Pizza
-        name='Pizza Funghi'
-        ingredients='Tomato, mozarella, and mushrooms'
-        photoName='pizzas/funghi.jpg'
-        price={12}
-      /> */}
     </main>
   );
 }
 
-function Pizza(props) {
-  console.log(props);
+function Pizza({ pizzaObj }) {
+  console.log(pizzaObj);
 
   // multiple returns can be used
-  if (props.pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
 
   return (
-    <li className='pizza'>
-      <img src={props.pizzaObj.photoName} alt='Spinaci Pizza' />
+    <li className={`pizza ${pizzaObj.soldOut ? 'sold-out' : ''}`}>
+      <img src={pizzaObj.photoName} alt={pizzaObj.photoName} />
       <div>
-        <h3>{props.pizzaObj.name}</h3>
-        <p>{props.pizzaObj.ingredients}</p>
-        <span>${props.pizzaObj.price}</span>
+        <h3>{pizzaObj.name}</h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>{pizzaObj.soldOut ? 'Sold Out' : pizzaObj.price}</span>
       </div>
     </li>
   );
 }
 
-function Order(props) {
+function Order({ closeHour, openHour }) {
   return (
     <div className='order'>
       <p>
-        We are open until {props.closeHour}:00. Come visit us or order online.
+        We are open from {openHour}:00 until {closeHour}:00. Come visit us or
+        order online.
       </p>
       <button className='btn'>Order Now</button>
     </div>
@@ -94,20 +85,10 @@ function Footer() {
   const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
 
-  console.log(isOpen);
-
-  // if (!isOpen)
-  //   return (
-  //     <p>
-  //       Sorry, we are closed. We are open from {openHour}:00 until {closeHour}
-  //       :00.
-  //     </p>
-  //   );
-
   return (
     <footer className='footer'>
       {isOpen ? (
-        <Order closeHour={closeHour} />
+        <Order closeHour={closeHour} openHour={openHour} />
       ) : (
         <p>
           Sorry, we are closed. We are open from {openHour}:00 until {closeHour}

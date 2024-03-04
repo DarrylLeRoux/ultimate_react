@@ -22,18 +22,25 @@ function Header() {
 }
 
 function Menu() {
-  const pizzas = pizzaList;
-  const numPizzas = pizzas.length;
+  // const pizzas = pizzaList;
+  // const numPizzas = pizzas.length;
 
   return (
     <main className='menu'>
       <h2>Our Menu</h2>
-      {numPizzas > 0 && (
+      {/* check the length of the pizzaList Object, and if it contains a value, short circuit the truthy value */}
+      {/* {pizzaList.length > 0 && ( */}
+      {/* with ternary: */}
+      {pizzaList.length > 0 ? (
         <ul className='pizzas'>
-          {pizzas.map((pizza) => {
+          {pizzaList.map((pizza) => {
+            // pass all properties of the pizza object into a property (prop) called pizzaObj
+            // alt would be <Pizza name={pizza.name} ingredients={pizza.ingredients} etc/>
             return <Pizza pizzaObj={pizza} key={pizza.name} />;
           })}
         </ul>
+      ) : (
+        <p>We're still working on our menu. Please come back later.</p>
       )}
 
       {/* <Pizza
@@ -54,15 +61,30 @@ function Menu() {
 
 function Pizza(props) {
   console.log(props);
+
+  // multiple returns can be used
+  if (props.pizzaObj.soldOut) return null;
+
   return (
     <li className='pizza'>
       <img src={props.pizzaObj.photoName} alt='Spinaci Pizza' />
       <div>
         <h3>{props.pizzaObj.name}</h3>
         <p>{props.pizzaObj.ingredients}</p>
-        <span>{props.pizzaObj.price}</span>
+        <span>${props.pizzaObj.price}</span>
       </div>
     </li>
+  );
+}
+
+function Order(props) {
+  return (
+    <div className='order'>
+      <p>
+        We are open until {props.closeHour}:00. Come visit us or order online.
+      </p>
+      <button className='btn'>Order Now</button>
+    </div>
   );
 }
 
@@ -74,15 +96,23 @@ function Footer() {
 
   console.log(isOpen);
 
+  // if (!isOpen)
+  //   return (
+  //     <p>
+  //       Sorry, we are closed. We are open from {openHour}:00 until {closeHour}
+  //       :00.
+  //     </p>
+  //   );
+
   return (
     <footer className='footer'>
-      {isOpen && (
-        <div className='order'>
-          <p>
-            We are open until {closeHour}:00. Come visit us or order online.
-          </p>
-          <button className='btn'>Order Now</button>
-        </div>
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          Sorry, we are closed. We are open from {openHour}:00 until {closeHour}
+          :00.
+        </p>
       )}
     </footer>
   );
